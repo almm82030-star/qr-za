@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - الزهراني لوجستيك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1a237e;
+            --secondary-blue: #283593;
+            --accent-gold: #ffd700;
+            --light-blue: #e8eaf6;
+            --white: #ffffff;
+            --success-green: #4CAF50;
+            --dark-blue: #0d1b6b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid var(--accent-gold);
+        }
+
+        .logo img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--accent-gold);
+        }
+
+        .system-name {
+            font-size: 18px;
+            color: var(--light-blue);
+        }
+
+        .user-info {
+            text-align: center;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .user-role {
+            font-size: 16px;
+            color: var(--accent-gold);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-right: 5px solid var(--accent-gold);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--light-blue);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--primary-blue);
+        }
+
+        .stat-info h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--dark-blue);
+        }
+
+        /* Departments Grid */
+        .dept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .dept-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid var(--accent-gold);
+            transition: all 0.3s;
+        }
+
+        .dept-card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .dept-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-blue);
+        }
+
+        .dept-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark-blue);
+        }
+
+        .dept-en-name {
+            font-size: 16px;
+            color: #666;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .dept-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success-green);
+        }
+
+        .current-ticket {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .ticket-number {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .ticket-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .queue-info {
+            background: var(--light-blue);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .queue-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .queue-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+        }
+
+        .queue-item {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            color: var(--dark-blue);
+            border: 2px solid var(--secondary-blue);
+        }
+
+        .dept-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .control-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .call-btn {
+            background: var(--success-green);
+            color: white;
+        }
+
+        .call-btn:hover {
+            background: #45a049;
+        }
+
+        .next-btn {
+            background: var(--accent-gold);
+            color: var(--dark-blue);
+        }
+
+        .next-btn:hover {
+            background: #ffc107;
+        }
+
+        .add-btn {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .add-btn:hover {
+            background: #283593;
+        }
+
+        .reset-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #d32f2f;
+        }
+
+        /* Recent Activity */
+        .activity-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+
+        .activity-text {
+            flex: 1;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo">
+                    <img src="https://i.ibb.co/1GHY3whz/bsxB90Z.png" alt="شعار الزهراني">
+                </div>
+                <div>
+                    <div class="company-name">الزهراني لوجستيك</div>
+                    <div class="system-name">لوحة تحكم نظام التذاكر</div>
+                </div>
+            </div>
+            
+            <div class="user-info">
+                <div class="user-name" id="currentUser">المدير المالي</div>
+                <div class="user-role" id="currentRole">CHIEF FINANCIAL OFFICER</div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-ticket-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>إجمالي التذاكر اليوم</h3>
+                    <div class="stat-number" id="totalTickets">0</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>العملاء في الانتظار</h3>
+                    <div class="stat-number" id="waitingCustomers">0</div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>متوسط وقت الانتظار</h3>
+                    <div class="stat-number">15<span style="font-size: 20px;"> دقيقة</span></div>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>تمت الخدمة اليوم</h3>
+                    <div class="stat-number" id="servedToday">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Departments Control -->
+        <div class="dept-grid" id="departmentsGrid">
+            <!-- سيتم ملؤها بالجافاسكريبت -->
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+            <div class="section-title">
+                <i class="fas fa-history"></i> النشاطات الأخيرة
+            </div>
+            <div class="activity-list" id="activityList">
+                <!-- سيتم ملؤها بالجافاسكريبت -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 الزهراني لوجستيك - جميع الحقوق محفوظة</p>
+            <p>آخر تحديث: <span id="footerTime">--:--</span></p>
+        </div>
+    </div>
+
+    <!-- Modal for Add Ticket -->
+    <div class="modal" id="addTicketModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>إضافة تذكرة جديدة</span>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label>اسم العميل (اختياري)</label>
+                <input type="text" id="customerName" placeholder="أدخل اسم العميل">
+            </div>
+            
+            <div class="form-group">
+                <label>نوع الخدمة</label>
+                <select id="serviceType">
+                    <option value="استفسار">استفسار</option>
+                    <option value="شكوى">شكوى</option>
+                    <option value="معاملة">معاملة</option>
+                    <option value="دفع">دفع</option>
+                    <option value="استلام">استلام</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>الأولوية</label>
+                <select id="ticketPriority">
+                    <option value="normal">عادي</option>
+                    <option value="vip">VIP</option>
+                    <option value="urgent">عاجل</option>
+                </select>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">إلغاء</button>
+                <button class="btn btn-primary" onclick="confirmAddTicket()">إضافة التذكرة</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تعريف الأقسام
+        const departments = {
+            finance: {
+                nameAr: "المدير المالي",
+                nameEn: "CHIEF FINANCIAL OFFICER",
+                location: "الطابق الثالث - مكتب 301",
+                color: "#1a237e",
+                adminPass: "00"
+            },
+            ninja: {
+                nameAr: "مشرفين نينجا",
+                nameEn: "NINJA SUPERVISOR",
+                location: "الطابق الثاني - مكتب 205",
+                color: "#283593",
+                adminPass: "00"
+            },
+            keemart: {
+                nameAr: "مشرف كيمارت",
+                nameEn: "KEMART SUPERVISOR",
+                location: "الطابق الأول - مكتب 103",
+                color: "#3949ab",
+                adminPass: "00"
+            },
+            vehicles: {
+                nameAr: "مسؤول المركبات",
+                nameEn: "VEHICLES OFFICIAL",
+                location: "الدور الأرضي - مكتب 005",
+                color: "#5c6bc0",
+                adminPass: "00"
+            },
+            projects: {
+                nameAr: "مدير المشاريع التشغيلية",
+                nameEn: "OPERATIONAL PROJECTS MANAGER",
+                location: "الطابق الرابع - مكتب 401",
+                color: "#7986cb",
+                adminPass: "00"
+            },
+            hr: {
+                nameAr: "مدير الموارد البشرية",
+                nameEn: "HUMAN RESOURCES MANAGER",
+                location: "الطابق الثالث - مكتب 305",
+                color: "#9fa8da",
+                adminPass: "00"
+            }
+        };
+
+        // البيانات
+        let ticketData = {};
+        let currentDept = '';
+        let activityLog = [];
+
+        // التهيئة
+        function init() {
+            // تحميل البيانات من localStorage
+            loadData();
+            
+            // تحميل من URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const dept = urlParams.get('dept');
+            
+            if (dept && departments[dept]) {
+                currentDept = dept;
+                updateUserInfo();
+            } else {
+                // إذا لم يكن هناك قسم محدد، استخدم الأول
+                currentDept = Object.keys(departments)[0];
+            }
+            
+            // إنشاء واجهة الأقسام
+            renderDepartments();
+            
+            // تحديث الإحصائيات
+            updateStats();
+            
+            // تحديث الوقت
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // تحديث تلقائي كل 5 ثواني
+            setInterval(updateDashboard, 5000);
+        }
+
+        // تحميل البيانات
+        function loadData() {
+            const saved = localStorage.getItem('ticketSystemData');
+            if (saved) {
+                ticketData = JSON.parse(saved);
+            } else {
+                // بيانات افتراضية
+                ticketData = {
+                    finance: { number: 5, queue: [1, 2, 3, 4, 5], served: 10 },
+                    ninja: { number: 3, queue: [1, 2, 3], served: 8 },
+                    keemart: { number: 2, queue: [1, 2], served: 5 },
+                    vehicles: { number: 4, queue: [1, 2, 3, 4], served: 12 },
+                    projects: { number: 1, queue: [1], served: 3 },
+                    hr: { number: 3, queue: [1, 2, 3], served: 7 }
+                };
+                saveData();
+            }
+            
+            // تحميل سجل النشاطات
+            const savedLog = localStorage.getItem('activityLog');
+            if (savedLog) {
+                activityLog = JSON.parse(savedLog);
+                renderActivityLog();
+            }
+        }
+
+        // حفظ البيانات
+        function saveData() {
+            localStorage.setItem('ticketSystemData', JSON.stringify(ticketData));
+            localStorage.setItem('activityLog', JSON.stringify(activityLog));
+        }
+
+        // تحديث معلومات المستخدم
+        function updateUserInfo() {
+            const dept = departments[currentDept];
+            document.getElementById('currentUser').textContent = dept.nameAr;
+            document.getElementById('currentRole').textContent = dept.nameEn;
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            let totalTickets = 0;
+            let waitingCustomers = 0;
+            let servedToday = 0;
+            
+            Object.values(ticketData).forEach(dept => {
+                totalTickets += dept.number || 0;
+                waitingCustomers += dept.queue?.length || 0;
+                servedToday += dept.served || 0;
+            });
+            
+            document.getElementById('totalTickets').textContent = totalTickets;
+            document.getElementById('waitingCustomers').textContent = waitingCustomers;
+            document.getElementById('servedToday').textContent = servedToday;
+        }
+
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ar-SA');
+            document.getElementById('footerTime').textContent = timeStr;
+        }
+
+        // تحديث لوحة التحكم
+        function updateDashboard() {
+            renderDepartments();
+            updateStats();
+        }
+
+        // عرض الأقسام
+        function renderDepartments() {
+            const grid = document.getElementById('departmentsGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(departments).forEach(([key, dept]) => {
+                const deptData = ticketData[key] || { number: 0, queue: [], served: 0 };
+                
+                const card = document.createElement('div');
+                card.className = 'dept-card';
+                card.style.borderTopColor = dept.color;
+                
+                card.innerHTML = `
+                    <div class="dept-header">
+                        <div>
+                            <div class="dept-name">${dept.nameAr}</div>
+                            <div class="dept-en-name">${dept.nameEn}</div>
+                        </div>
+                        <div class="dept-status">
+                            <div class="status-dot"></div>
+                            <span>نشط</span>
+                        </div>
+                    </div>
+                    
+                    <div class="current-ticket">
+                        <div class="ticket-number">${deptData.number || 0}</div>
+                        <div class="ticket-label">آخر تذكرة</div>
+                    </div>
+                    
+                    <div class="queue-info">
+                        <div class="queue-title">قائمة الانتظار (${deptData.queue?.length || 0})</div>
+                        <div class="queue-list" id="queue-${key}">
+                            ${deptData.queue?.map(t => `<div class="queue-item">${t}</div>`).join('') || ''}
+                        </div>
+                    </div>
+                    
+                    <div class="dept-controls">
+                        <button class="control-btn call-btn" onclick="callTicket('${key}')">
+                            <i class="fas fa-bullhorn"></i> نداء التالي
+                        </button>
+                        <button class="control-btn next-btn" onclick="nextTicket('${key}')">
+                            <i class="fas fa-forward"></i> التالي
+                        </button>
+                        <button class="control-btn add-btn" onclick="openAddTicket('${key}')">
+                            <i class="fas fa-plus"></i> إضافة تذكرة
+                        </button>
+                        <button class="control-btn reset-btn" onclick="resetDept('${key}')">
+                            <i class="fas fa-redo"></i> إعادة تعيين
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // عرض سجل النشاطات
+        function renderActivityLog() {
+            const list = document.getElementById('activityList');
+            list.innerHTML = '';
+            
+            const recentActivities = activityLog.slice(-10).reverse();
+            
+            recentActivities.forEach(activity => {
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                
+                const icon = activity.type === 'add' ? 'fa-plus-circle' : 
+                            activity.type === 'call' ? 'fa-bullhorn' : 
+                            activity.type === 'next' ? 'fa-forward' : 'fa-history';
+                
+                item.innerHTML = `
+                    <div class="activity-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <div class="activity-text">
+                        <div>${activity.message}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+
+        // إضافة نشاط للسجل
+        function addActivity(type, deptKey, ticketNum = '') {
+            const dept = departments[deptKey];
+            let message = '';
+            
+            switch(type) {
+                case 'add':
+                    message = `تم إضافة تذكرة جديدة ${ticketNum} للقسم ${dept.nameAr}`;
+                    break;
+                case 'call':
+                    message = `تم نداء التذكرة ${ticketNum} للقسم ${dept.nameAr}`;
+                    break;
+                case 'next':
+                    message = `تم التقدم للتذكرة التالية في قسم ${dept.nameAr}`;
+                    break;
+                case 'reset':
+                    message = `تم إعادة تعيين قسم ${dept.nameAr}`;
+                    break;
+            }
+            
+            const now = new Date();
+            activityLog.push({
+                type: type,
+                message: message,
+                time: now.toLocaleTimeString('ar-SA'),
+                timestamp: now.getTime()
+            });
+            
+            renderActivityLog();
+            saveData();
+        }
+
+        // استدعاء تذكرة
+        function callTicket(deptKey) {
+            const deptData = ticketData[deptKey];
+            if (deptData.queue && deptData.queue.length > 0) {
+                const ticketNum = deptData.queue[0];
+                addActivity('call', deptKey, ticketNum);
+                alert(`تم نداء التذكرة ${ticketNum} للقسم ${departments[deptKey].nameAr}`);
+            } else {
+                alert('لا توجد تذاكر في قائمة الانتظار');
+            }
+        }
+
+        // التالي
+        function nextTicket(deptKey) {
+            const deptData = ticketData[deptKey];
+            if (deptData.queue && deptData.queue.length > 0) {
+                deptData.queue.shift(); // إزالة التذكرة الأولى
+                deptData.served = (deptData.served || 0) + 1;
+                addActivity('next', deptKey);
+                saveData();
+                renderDepartments();
+                updateStats();
+            }
+        }
+
+        // إضافة تذكرة
+        function openAddTicket(deptKey) {
+            currentDept = deptKey;
+            document.getElementById('addTicketModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addTicketModal').style.display = 'none';
+            document.getElementById('customerName').value = '';
+            document.getElementById('serviceType').value = 'استفسار';
+            document.getElementById('ticketPriority').value = 'normal';
+        }
+
+        function confirmAddTicket() {
+            const deptData = ticketData[currentDept];
+            deptData.number = (deptData.number || 0) + 1;
+            
+            if (!deptData.queue) deptData.queue = [];
+            deptData.queue.push(deptData.number);
+            
+            const customerName = document.getElementById('customerName').value;
+            const serviceType = document.getElementById('serviceType').value;
+            const priority = document.getElementById('ticketPriority').value;
+            
+            addActivity('add', currentDept, deptData.number);
+            saveData();
+            renderDepartments();
+            updateStats();
+            closeModal();
+            
+            alert(`تم إضافة التذكرة #${deptData.number} بنجاح للقسم ${departments[currentDept].nameAr}`);
+        }
+
+        // إعادة تعيين القسم
+        function resetDept(deptKey) {
+            if (confirm(`هل تريد إعادة تعيين قسم ${departments[deptKey].nameAr}؟ سيتم حذف جميع التذاكر في قائمة الانتظار.`)) {
+                ticketData[deptKey] = { number: 0, queue: [], served: 0 };
+                addActivity('reset', deptKey);
+                saveData();
+                renderDepartments();
+                updateStats();
+            }
+        }
+
+        // بدء التطبيق
+        window.onload = init;
+    </script>
+</body>
+</html>
