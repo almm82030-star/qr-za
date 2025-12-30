@@ -6,226 +6,468 @@
     <title>طلب تذكرة - الزهراني لوجستيك</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        
+        :root {
+            --primary-blue: #1a237e;
+            --secondary-blue: #283593;
+            --accent-gold: #ffd700;
+            --light-blue: #e8eaf6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
         .container {
             background: white;
             border-radius: 25px;
             width: 100%;
             max-width: 500px;
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            border: 5px solid #ffd700;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 5px solid var(--accent-gold);
             text-align: center;
         }
-        
+
         .logo {
             width: 100px;
             height: 100px;
-            background: #1a237e;
+            background: var(--primary-blue);
             border-radius: 50%;
             margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 4px solid #ffd700;
+            border: 4px solid var(--accent-gold);
         }
-        
-        .logo img {
-            width: 70%;
-            height: 70%;
-            filter: brightness(0) invert(1);
+
+        .logo svg {
+            width: 80%;
+            height: 80%;
         }
-        
+
+        h1 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .dept-info {
+            background: var(--light-blue);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--accent-gold);
+        }
+
         .dept-name {
-            font-size: 32px;
+            font-size: 26px;
             font-weight: 900;
-            color: #1a237e;
+            color: var(--primary-blue);
             margin-bottom: 5px;
         }
-        
+
         .dept-en {
-            font-size: 18px;
-            color: #283593;
-            margin-bottom: 30px;
+            font-size: 16px;
+            color: var(--secondary-blue);
             direction: ltr;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
             text-align: right;
         }
-        
+
         input, select {
             width: 100%;
             padding: 15px;
-            border: 3px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
             text-align: right;
         }
-        
+
         .btn {
             width: 100%;
             padding: 18px;
-            background: #1a237e;
+            background: var(--primary-blue);
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 22px;
-            font-weight: 900;
-            margin-top: 20px;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            transition: all 0.3s;
         }
-        
+
         .btn:hover {
-            background: #283593;
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
         }
-        
+
         .ticket-result {
             display: none;
-            background: #4CAF50;
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
             color: white;
             border-radius: 20px;
             padding: 30px;
             margin-top: 20px;
+            animation: fadeIn 0.5s ease;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .ticket-number {
-            font-size: 72px;
+            font-size: 60px;
             font-weight: 900;
             margin: 20px 0;
+            direction: ltr;
         }
-        
+
         .ticket-arabic {
-            font-size: 36px;
+            font-size: 30px;
             margin-bottom: 20px;
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            text-align: right;
+        }
+
+        .instruction-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-right: 4px solid var(--accent-gold);
+        }
+
+        .instruction-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .language-switch {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-blue);
+            color: white;
         }
     </style>
 </head>
 <body>
+    <div class="language-switch">
+        <button class="lang-btn active" onclick="setLanguage('ar')">عربي</button>
+        <button class="lang-btn" onclick="setLanguage('en')">English</button>
+    </div>
+
     <div class="container">
         <div class="logo">
-            <img src="https://i.ibb.co/1GHY3whz/bsxB90Z.png" alt="شعار">
+            <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#1a237e"/>
+                <text x="50" y="60" text-anchor="middle" fill="white" font-size="30">AL</text>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#ffd700" stroke-width="3"/>
+            </svg>
         </div>
         
-        <h1 style="color: #1a237e; margin-bottom: 10px;">الزهراني لوجستيك</h1>
-        <p style="color: #666; margin-bottom: 30px;">نظام التذاكر الذكي</p>
+        <h1 id="companyName">الزهراني لوجستيك</h1>
+        <p class="subtitle" id="systemName">نظام التذاكر الذكي</p>
         
-        <div id="deptInfo">
-            <!-- سيتم ملؤه بالجافاسكريبت -->
+        <div id="deptInfo" class="dept-info">
+            <!-- سيتم ملؤه -->
         </div>
         
         <div class="form-group">
-            <input type="text" id="customerName" placeholder="اسمك الكريم (اختياري)">
+            <label id="nameLabel" style="display: block; margin-bottom: 5px; color: #1a237e; font-weight: 700;">اسمك الكريم (اختياري)</label>
+            <input type="text" id="customerName" placeholder="أدخل اسمك">
         </div>
         
         <div class="form-group">
+            <label id="serviceLabel" style="display: block; margin-bottom: 5px; color: #1a237e; font-weight: 700;">نوع الخدمة المطلوبة</label>
             <select id="serviceType">
-                <option>استفسار</option>
-                <option>شكوى</option>
-                <option>معاملة</option>
-                <option>دفع</option>
-                <option>استلام</option>
+                <option value="استفسار">استفسار</option>
+                <option value="شكوى">شكوى</option>
+                <option value="معاملة">معاملة</option>
+                <option value="دفع">دفع</option>
+                <option value="استلام">استلام</option>
             </select>
         </div>
         
-        <button class="btn" onclick="createTicket()">
+        <button class="btn" onclick="createTicket()" id="getTicketBtn">
             <i class="fas fa-ticket-alt"></i> احصل على تذكرتك
         </button>
         
         <div class="ticket-result" id="ticketResult">
-            <div style="font-size: 80px; margin-bottom: 20px;">
+            <div style="font-size: 50px; margin-bottom: 15px;">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <div style="font-size: 24px; font-weight: 700;">تم إنشاء تذكرتك!</div>
+            <div style="font-size: 20px; font-weight: 700;" id="successMessage">تم إنشاء تذكرتك!</div>
             <div class="ticket-number" id="ticketNumber">0000</div>
             <div class="ticket-arabic" id="ticketArabic">٠٠٠٠</div>
-            <div style="font-size: 18px;">يرجى الانتظار في منطقة الانتظار</div>
+            <div style="font-size: 16px;" id="waitMessage">يرجى الانتظار في منطقة الانتظار</div>
+        </div>
+        
+        <div class="instructions">
+            <div style="font-size: 18px; font-weight: 700; color: #1a237e; margin-bottom: 15px;">
+                <i class="fas fa-info-circle"></i> <span id="instructionsTitle">تعليمات الانتظار</span>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-chair"></i>
+                </div>
+                <div id="instruction1">اجلس في منطقة الانتظار المخصصة</div>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-desktop"></i>
+                </div>
+                <div id="instruction2">راقب الشاشة الرئيسية لمعرفة دورك</div>
+            </div>
+            
+            <div class="instruction-item">
+                <div class="instruction-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div id="instruction3">استمع للنداء الصوتي عند وصول دورك</div>
+            </div>
         </div>
     </div>
 
     <script>
-        // الحصول على القسم من URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const deptParam = urlParams.get('dept') || 'finance';
-        
-        // تعريف الأقسام
+        // ============ بيانات النظام ============
         const departments = {
             finance: { nameAr: "المدير المالي", nameEn: "CHIEF FINANCIAL OFFICER" },
             ninja: { nameAr: "مشرف نينجا", nameEn: "NINJA SUPERVISOR" },
             keemart: { nameAr: "مشرف كيمارت", nameEn: "KEMART SUPERVISOR" },
             vehicles: { nameAr: "مسؤول المركبات", nameEn: "VEHICLES OFFICIAL" },
-            projects: { nameAr: "مدير المشاريع", nameEn: "PROJECTS MANAGER" },
-            hr: { nameAr: "مدير الموارد البشرية", nameEn: "HR MANAGER" }
+            projects: { nameAr: "مدير المشاريع التشغيلية", nameEn: "OPERATIONAL PROJECTS MANAGER" },
+            hr: { nameAr: "مدير الموارد البشرية", nameEn: "HUMAN RESOURCES MANAGER" }
         };
-        
-        // تحديث عرض القسم
-        const dept = departments[deptParam] || departments.finance;
-        document.getElementById('deptInfo').innerHTML = `
-            <div class="dept-name">${dept.nameAr}</div>
-            <div class="dept-en">${dept.nameEn}</div>
-        `;
-        
-        // تحويل الأرقام للعربية
-        function toArabicDigits(n) {
-            return n.toString().replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
-        }
-        
-        // إنشاء تذكرة
-        function createTicket() {
-            // إرسال طلب لخادم WebSocket (محاكاة)
-            const ticketNumber = Math.floor(1000 + Math.random() * 900);
+
+        const translations = {
+            ar: {
+                companyName: "الزهراني لوجستيك",
+                systemName: "نظام التذاكر الذكي",
+                nameLabel: "اسمك الكريم (اختياري)",
+                serviceLabel: "نوع الخدمة المطلوبة",
+                getTicketBtn: "احصل على تذكرتك",
+                successMessage: "تم إنشاء تذكرتك!",
+                waitMessage: "يرجى الانتظار في منطقة الانتظار",
+                instructionsTitle: "تعليمات الانتظار",
+                instruction1: "اجلس في منطقة الانتظار المخصصة",
+                instruction2: "راقب الشاشة الرئيسية لمعرفة دورك",
+                instruction3: "استمع للنداء الصوتي عند وصول دورك"
+            },
+            en: {
+                companyName: "Al Zahrani Logistics",
+                systemName: "Smart Ticket System",
+                nameLabel: "Your Name (Optional)",
+                serviceLabel: "Required Service Type",
+                getTicketBtn: "Get Your Ticket",
+                successMessage: "Your Ticket Has Been Created!",
+                waitMessage: "Please wait in the waiting area",
+                instructionsTitle: "Waiting Instructions",
+                instruction1: "Sit in the designated waiting area",
+                instruction2: "Watch the main screen for your turn",
+                instruction3: "Listen for the audio call when it's your turn"
+            }
+        };
+
+        let currentLanguage = 'ar';
+
+        // ============ التهيئة ============
+        function init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const deptParam = urlParams.get('dept') || 'finance';
+            const dept = departments[deptParam] || departments.finance;
             
-            // حفظ في localStorage للتزامن
-            let tickets = JSON.parse(localStorage.getItem('tickets_' + deptParam) || '[]');
-            tickets.push({
-                number: ticketNumber,
-                customer: document.getElementById('customerName').value || 'عميل',
-                service: document.getElementById('serviceType').value,
-                time: new Date().toISOString()
+            // عرض معلومات القسم
+            document.getElementById('deptInfo').innerHTML = `
+                <div class="dept-name">${dept.nameAr}</div>
+                <div class="dept-en">${dept.nameEn}</div>
+            `;
+            
+            // حفظ القسم الحالي
+            window.currentDepartment = deptParam;
+            
+            // تطبيق اللغة الافتراضية
+            setLanguage('ar');
+        }
+
+        // ============ إدارة اللغة ============
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // تحديث أزرار اللغة
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === (lang === 'ar' ? 'عربي' : 'English')) {
+                    btn.classList.add('active');
+                }
             });
             
-            localStorage.setItem('tickets_' + deptParam, JSON.stringify(tickets));
+            // تحديث النصوص
+            const texts = translations[lang];
+            document.getElementById('companyName').textContent = texts.companyName;
+            document.getElementById('systemName').textContent = texts.systemName;
+            document.getElementById('nameLabel').textContent = texts.nameLabel;
+            document.getElementById('serviceLabel').textContent = texts.serviceLabel;
+            document.getElementById('getTicketBtn').innerHTML = `<i class="fas fa-ticket-alt"></i> ${texts.getTicketBtn}`;
+            document.getElementById('successMessage').textContent = texts.successMessage;
+            document.getElementById('waitMessage').textContent = texts.waitMessage;
+            document.getElementById('instructionsTitle').textContent = texts.instructionsTitle;
+            document.getElementById('instruction1').textContent = texts.instruction1;
+            document.getElementById('instruction2').textContent = texts.instruction2;
+            document.getElementById('instruction3').textContent = texts.instruction3;
+            
+            // تحديث النصوص حسب اللغة
+            if (lang === 'en') {
+                document.body.style.direction = 'ltr';
+                document.body.style.textAlign = 'left';
+                document.querySelector('.container').style.textAlign = 'left';
+            } else {
+                document.body.style.direction = 'rtl';
+                document.body.style.textAlign = 'right';
+                document.querySelector('.container').style.textAlign = 'center';
+            }
+        }
+
+        // ============ إنشاء تذكرة ============
+        function createTicket() {
+            const customerName = document.getElementById('customerName').value || 
+                (currentLanguage === 'ar' ? 'عميل' : 'Customer');
+            const serviceType = document.getElementById('serviceType').value;
+            
+            // إنشاء رقم تذكرة
+            const ticketNumber = Math.floor(1000 + Math.random() * 900);
+            
+            // حفظ التذكرة
+            saveTicket(ticketNumber, customerName, serviceType);
             
             // عرض النتيجة
+            showTicketResult(ticketNumber);
+            
+            // إرسال التذكرة للشاشة
+            sendToDisplay(ticketNumber);
+        }
+
+        function saveTicket(number, customer, service) {
+            const ticket = {
+                number: number,
+                department: window.currentDepartment,
+                customerName: customer,
+                serviceType: service,
+                timestamp: new Date().toISOString(),
+                status: 'waiting',
+                language: currentLanguage
+            };
+            
+            // حفظ في localStorage
+            const tickets = JSON.parse(localStorage.getItem('tickets_' + window.currentDepartment) || '[]');
+            tickets.push(ticket);
+            localStorage.setItem('tickets_' + window.currentDepartment, JSON.stringify(tickets));
+            
+            // إرسال إشعار جديد
+            localStorage.setItem('new_ticket', JSON.stringify(ticket));
+        }
+
+        function showTicketResult(ticketNumber) {
             document.getElementById('ticketNumber').textContent = ticketNumber;
             document.getElementById('ticketArabic').textContent = toArabicDigits(ticketNumber);
             document.getElementById('ticketResult').style.display = 'block';
             
-            // إرسال إشعار لجميع الصفحات المفتوحة (للتزامن)
-            if (window.parent) {
-                window.parent.postMessage({
+            // إخفاء النموذج
+            document.querySelector('.form-group').style.display = 'none';
+            document.querySelector('.btn').style.display = 'none';
+        }
+
+        function sendToDisplay(ticketNumber) {
+            // إرسال رسالة لشاشة العرض
+            if (window.opener) {
+                window.opener.postMessage({
                     type: 'NEW_TICKET',
-                    department: deptParam,
-                    ticketNumber: ticketNumber
+                    ticketNumber: ticketNumber,
+                    department: window.currentDepartment,
+                    language: currentLanguage
                 }, '*');
             }
             
-            // إرسال إشعار للخادم (محاكاة)
-            sendToServer(deptParam, ticketNumber);
-        }
-        
-        function sendToServer(dept, ticketNumber) {
-            // محاكاة إرسال لخادم WebSocket
-            console.log(`إرسال تذكرة ${ticketNumber} للقسم ${dept}`);
+            // إرسال عبر localStorage
+            const displayData = {
+                type: 'TICKET_CREATED',
+                ticketNumber: ticketNumber,
+                department: window.currentDepartment,
+                timestamp: Date.now()
+            };
             
-            // يمكنك هنا إضافة كود الاتصال الفعلي بـ WebSocket
-            // socket.emit('new_ticket', { dept: dept, number: ticketNumber });
+            localStorage.setItem('display_update', JSON.stringify(displayData));
         }
-        
-        // التهيئة
-        window.onload = function() {
-            // تهيئة localStorage إذا لزم
-            if (!localStorage.getItem('tickets_' + deptParam)) {
-                localStorage.setItem('tickets_' + deptParam, JSON.stringify([]));
-            }
-        };
+
+        // ============ أدوات مساعدة ============
+        function toArabicDigits(n) {
+            return n.toString().replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+        }
+
+        // بدء التطبيق
+        window.onload = init;
     </script>
 </body>
 </html>
