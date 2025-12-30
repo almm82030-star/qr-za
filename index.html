@@ -5,43 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>شاشة التذاكر - الزهراني لوجستيك</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: #1a237e; color: white; height: 100vh; overflow: hidden; }
-        
+        :root {
+            --primary-blue: #1a237e;
+            --secondary-blue: #283593;
+            --accent-gold: #ffd700;
+            --light-blue: #e8eaf6;
+            --success-green: #4CAF50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
         .container {
             display: grid;
             grid-template-columns: 300px 1fr;
             height: 100vh;
         }
-        
+
         .sidebar {
-            background: #0d1b6b;
+            background: rgba(13, 27, 107, 0.95);
             padding: 20px;
-            border-left: 5px solid #ffd700;
+            border-left: 5px solid var(--accent-gold);
+            display: flex;
+            flex-direction: column;
         }
-        
+
         .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .logo img {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             background: white;
             border-radius: 50%;
-            padding: 15px;
-            border: 5px solid #ffd700;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid var(--accent-gold);
+            overflow: hidden;
         }
-        
+
+        .logo svg {
+            width: 80%;
+            height: 80%;
+        }
+
         .main-display {
             padding: 30px;
             display: flex;
             flex-direction: column;
         }
-        
+
         .ticket-display {
             flex: 1;
             background: white;
@@ -51,382 +75,709 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #1a237e;
+            color: var(--primary-blue);
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
+
         .ticket-number {
-            font-size: 180px;
+            font-size: 160px;
             font-weight: 900;
             line-height: 1;
+            direction: ltr;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
         }
-        
+
         .ticket-arabic {
-            font-size: 60px;
-            color: #283593;
+            font-size: 50px;
+            color: var(--secondary-blue);
             margin-bottom: 30px;
         }
-        
+
         .dept-name {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 800;
             margin-top: 20px;
         }
-        
+
         .dept-en {
             font-size: 24px;
-            color: #666;
+            color: #555;
+            margin-top: 10px;
         }
-        
+
+        .announcement-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 35, 126, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            animation: pulseOverlay 2s infinite;
+        }
+
+        @keyframes pulseOverlay {
+            0% { background: rgba(26, 35, 126, 0.95); }
+            50% { background: rgba(26, 35, 126, 0.85); }
+            100% { background: rgba(26, 35, 126, 0.95); }
+        }
+
+        .whistle-icon {
+            font-size: 100px;
+            color: var(--accent-gold);
+            animation: whistleSpin 1s ease infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes whistleSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .announcement-text {
+            font-size: 36px;
+            font-weight: 900;
+            color: white;
+            text-align: center;
+            margin: 10px 0;
+        }
+
         .queue {
-            background: #e8eaf6;
+            background: var(--light-blue);
             border-radius: 20px;
             padding: 20px;
             margin: 20px;
-            color: #1a237e;
+            color: var(--primary-blue);
         }
-        
+
         .queue-list {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             margin-top: 15px;
         }
-        
+
         .queue-item {
             background: white;
             padding: 10px 20px;
             border-radius: 10px;
             font-size: 24px;
             font-weight: 700;
-            border: 3px solid #283593;
+            border: 3px solid var(--secondary-blue);
         }
-        
-        .connection-status {
+
+        .status {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             padding: 10px 20px;
-            border-radius: 10px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 14px;
+            z-index: 100;
         }
-        
+
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: #ff5252;
-        }
-        
-        .status-dot.connected {
-            background: #4CAF50;
+            background: var(--success-green);
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
-        
-        .depts-grid {
+
+        .dept-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-top: 20px;
         }
-        
+
         .dept-card {
-            background: white;
+            background: rgba(255,255,255,0.1);
             padding: 15px;
             border-radius: 15px;
             text-align: center;
             cursor: pointer;
-            border: 3px solid transparent;
-            color: #1a237e;
+            border: 2px solid transparent;
+            transition: all 0.3s;
         }
-        
+
+        .dept-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.2);
+        }
+
         .dept-card.active {
-            border-color: #ffd700;
-            background: #fff8e1;
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            border-color: white;
+            font-weight: 700;
+        }
+
+        .dept-name-small {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .dept-count {
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            border: 3px solid var(--accent-gold);
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: var(--accent-gold);
+        }
+
+        .language-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .next-ticket {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success-green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
+    <div class="controls">
+        <div class="control-btn" onclick="toggleSound()" title="كتم/تشغيل الصوت">
+            <i class="fas fa-volume-up"></i>
+        </div>
+        <div class="control-btn" onclick="toggleFullscreen()" title="ملء الشاشة">
+            <i class="fas fa-expand"></i>
+        </div>
+        <div class="control-btn" onclick="callNextTicket()" title="نداء التالي">
+            <i class="fas fa-bullhorn"></i>
+        </div>
+    </div>
+
+    <div class="status">
+        <div class="status-dot"></div>
+        <span id="statusText">نظام التشغيل - جاهز</span>
+    </div>
+
     <div class="container">
         <div class="sidebar">
             <div class="logo">
-                <img src="https://i.ibb.co/1GHY3whz/bsxB90Z.png" alt="شعار الزهراني">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#1a237e"/>
+                    <text x="50" y="60" text-anchor="middle" fill="white" font-size="30">AL</text>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#ffd700" stroke-width="3"/>
+                </svg>
             </div>
+            
             <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #ffd700; font-size: 28px;">الزهراني لوجستيك</h1>
-                <p style="color: #e8eaf6;">شاشة عرض التذاكر</p>
+                <h1 style="color: var(--accent-gold); font-size: 24px;">الزهراني لوجستيك</h1>
+                <p style="color: var(--light-blue); font-size: 14px;">Al Zahrani Logistics</p>
+                <p style="color: var(--light-blue); font-size: 12px; margin-top: 5px;">Ticket Display System</p>
             </div>
             
             <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                <div style="color: #ffd700; margin-bottom: 5px;">العملاء في الانتظار</div>
+                <div style="color: var(--accent-gold); margin-bottom: 5px;">العملاء في الانتظار / Waiting</div>
                 <div id="waitingCount" style="font-size: 48px; font-weight: 900;">0</div>
             </div>
             
-            <div style="color: #e8eaf6; font-size: 14px;">
-                آخر تحديث: <span id="lastUpdate">--:--</span>
+            <div style="color: var(--light-blue); font-size: 12px; margin-top: auto;">
+                <div>آخر تحديث / Last Update: <span id="lastUpdate">--:--</span></div>
+                <div>التذاكر اليوم / Today: <span id="todayTickets">0</span></div>
+                <div>القسم الحالي / Current: <span id="currentDeptText">المدير المالي</span></div>
             </div>
         </div>
         
         <div class="main-display">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h1 style="font-size: 36px; color: white;" id="currentDept">المدير المالي</h1>
-                <div style="font-size: 24px; color: #ffd700;" id="currentTime">--:--:--</div>
+                <h1 style="font-size: 28px;" id="currentDeptTitle">المدير المالي</h1>
+                <div style="font-size: 24px; color: var(--accent-gold);" id="currentTime">--:--:--</div>
             </div>
             
-            <div class="ticket-display">
+            <div class="ticket-display" id="ticketDisplay">
+                <div class="announcement-overlay" id="announcementOverlay">
+                    <div class="whistle-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="announcement-text" id="announcementAr">رقم ١٠٠١، المدير المالي</div>
+                    <div class="announcement-text" id="announcementEn">Number 1001, Chief Financial Officer</div>
+                </div>
+                
                 <div class="ticket-number" id="currentTicket">0000</div>
                 <div class="ticket-arabic" id="currentTicketAr">٠٠٠٠</div>
-                <div style="font-size: 24px; color: #666; margin-bottom: 30px;">رقم التذكرة الحالية</div>
+                <div style="font-size: 20px; color: #666; margin-bottom: 30px;">رقم التذكرة / Ticket Number</div>
                 
                 <div class="dept-name" id="deptNameAr">المدير المالي</div>
                 <div class="dept-en" id="deptNameEn">CHIEF FINANCIAL OFFICER</div>
             </div>
             
             <div class="queue">
-                <h3 style="margin-bottom: 15px;">قائمة الانتظار (<span id="queueCount">0</span>)</h3>
+                <h3 style="margin-bottom: 15px;">آخر التذاكر / Recent Tickets</h3>
                 <div class="queue-list" id="queueList">
                     <!-- التذاكر تظهر هنا -->
                 </div>
             </div>
             
-            <div style="margin-top: 20px;">
-                <h3 style="color: white; margin-bottom: 15px;">الأقسام</h3>
-                <div class="depts-grid" id="deptsGrid">
-                    <!-- الأقسام تظهر هنا -->
-                </div>
+            <div class="dept-cards" id="deptCards">
+                <!-- البطاقات تظهر هنا -->
             </div>
         </div>
     </div>
-    
-    <div class="connection-status" id="connectionStatus">
-        <div class="status-dot" id="statusDot"></div>
-        <span id="statusText">جاري الاتصال...</span>
-    </div>
 
+    <!-- صفارة النداء -->
+    <audio id="whistleSound" src="https://assets.mixkit.co/sfx/preview/mixkit-warning-whistle-688.mp3"></audio>
+    
     <script>
-        // =================== إعدادات Viber Base ===================
-        const DISPLAY_ID = 'display_' + Math.random().toString(36).substr(2, 9);
-        let currentDept = 'finance';
-        let socket = null;
-        
-        // بيانات الأقسام
+        // ============ بيانات النظام ============
         const departments = {
-            finance: { nameAr: "المدير المالي", nameEn: "CHIEF FINANCIAL OFFICER", color: "#1a237e" },
-            ninja: { nameAr: "مشرف نينجا", nameEn: "NINJA SUPERVISOR", color: "#283593" },
-            keemart: { nameAr: "مشرف كيمارت", nameEn: "KEMART SUPERVISOR", color: "#3949ab" },
-            vehicles: { nameAr: "مسؤول المركبات", nameEn: "VEHICLES OFFICIAL", color: "#5c6bc0" },
-            projects: { nameAr: "مدير المشاريع", nameEn: "PROJECTS MANAGER", color: "#7986cb" },
-            hr: { nameAr: "مدير الموارد البشرية", nameEn: "HR MANAGER", color: "#9fa8da" }
+            finance: { 
+                nameAr: "المدير المالي", 
+                nameEn: "CHIEF FINANCIAL OFFICER", 
+                color: "#1a237e",
+                location: "الطابق الثالث، مكتب 301 / 3rd Floor, Office 301"
+            },
+            ninja: { 
+                nameAr: "مشرف نينجا", 
+                nameEn: "NINJA SUPERVISOR", 
+                color: "#283593",
+                location: "الطابق الثاني، مكتب 205 / 2nd Floor, Office 205"
+            },
+            keemart: { 
+                nameAr: "مشرف كيمارت", 
+                nameEn: "KEMART SUPERVISOR", 
+                color: "#3949ab",
+                location: "الطابق الأول، مكتب 103 / 1st Floor, Office 103"
+            },
+            vehicles: { 
+                nameAr: "مسؤول المركبات", 
+                nameEn: "VEHICLES OFFICIAL", 
+                color: "#5c6bc0",
+                location: "الدور الأرضي، مكتب 005 / Ground Floor, Office 005"
+            },
+            projects: { 
+                nameAr: "مدير المشاريع التشغيلية", 
+                nameEn: "OPERATIONAL PROJECTS MANAGER", 
+                color: "#7986cb",
+                location: "الطابق الرابع، مكتب 401 / 4th Floor, Office 401"
+            },
+            hr: { 
+                nameAr: "مدير الموارد البشرية", 
+                nameEn: "HUMAN RESOURCES MANAGER", 
+                color: "#9fa8da",
+                location: "الطابق الثالث، مكتب 305 / 3rd Floor, Office 305"
+            }
         };
-        
-        // =================== WebSocket Connection ===================
-        function connectWebSocket() {
-            // استخدام WebSocket مباشرة
-            const wsUrl = 'wss://ws.viberbase.com/display'; // أو خادمك الخاص
+
+        // ============ المتغيرات العامة ============
+        let currentDept = 'finance';
+        let allTickets = [];
+        let soundEnabled = true;
+        let autoRotate = true;
+        let rotateInterval;
+        let announcementQueue = [];
+
+        // ============ التهيئة ============
+        function init() {
+            // تحميل التذاكر الحالية
+            loadTickets();
             
-            updateStatus(false, 'جاري الاتصال...');
+            // إنشاء بطاقات الأقسام
+            createDeptCards();
             
-            // محاكاة الاتصال (استبدل هذا بـ WebSocket حقيقي)
-            setTimeout(() => {
-                updateStatus(true, 'متصل - جاهز');
-                
-                // محاكاة استقبال تذاكر جديدة
-                setInterval(() => {
-                    if (Math.random() > 0.7) { // 30% فرصة لتذكرة جديدة
-                        simulateNewTicket();
-                    }
-                }, 8000);
-                
-                // محاكاة التبديل بين الأقسام
-                setInterval(() => {
-                    rotateDepartment();
-                }, 15000);
-                
-            }, 2000);
+            // تحديث الوقت
+            updateTime();
+            setInterval(updateTime, 1000);
+            
+            // مراقبة التذاكر الجديدة
+            setInterval(checkNewTickets, 1000);
+            
+            // الاستماع للرسائل من الصفحات الأخرى
+            window.addEventListener('message', handleMessage);
+            window.addEventListener('storage', handleStorage);
+            
+            // بدء التدوير التلقائي
+            startAutoRotate();
+            
+            // تحديث العرض
+            updateDisplay();
         }
-        
-        function updateStatus(connected, message) {
-            const dot = document.getElementById('statusDot');
-            const text = document.getElementById('statusText');
-            
-            if (connected) {
-                dot.classList.add('connected');
-            } else {
-                dot.classList.remove('connected');
-            }
-            
-            text.textContent = message;
-        }
-        
-        // =================== إدارة التذاكر ===================
+
+        // ============ إدارة التذاكر ============
         function loadTickets() {
-            // تهيئة البيانات إذا لم تكن موجودة
+            allTickets = [];
             Object.keys(departments).forEach(dept => {
-                if (!localStorage.getItem('tickets_' + dept)) {
-                    localStorage.setItem('tickets_' + dept, JSON.stringify([]));
+                const tickets = JSON.parse(localStorage.getItem('tickets_' + dept) || '[]');
+                allTickets.push(...tickets);
+            });
+            updateCounters();
+        }
+
+        function checkNewTickets() {
+            const newTicketData = localStorage.getItem('new_ticket');
+            if (newTicketData) {
+                const ticket = JSON.parse(newTicketData);
+                addTicket(ticket);
+                localStorage.removeItem('new_ticket');
+            }
+            
+            const displayUpdate = localStorage.getItem('display_update');
+            if (displayUpdate) {
+                const update = JSON.parse(displayUpdate);
+                if (update.type === 'TICKET_CREATED') {
+                    announceNewTicket(update.ticketNumber, update.department);
                 }
-            });
+                localStorage.removeItem('display_update');
+            }
         }
-        
-        function simulateNewTicket() {
-            const depts = Object.keys(departments);
-            const randomDept = depts[Math.floor(Math.random() * depts.length)];
+
+        function addTicket(ticket) {
+            allTickets.push(ticket);
             
-            // الحصول على التذاكر الحالية
-            let tickets = JSON.parse(localStorage.getItem('tickets_' + randomDept) || '[]');
-            const newNumber = tickets.length + 1;
+            // حفظ في القسم المحدد
+            const deptTickets = JSON.parse(localStorage.getItem('tickets_' + ticket.department) || '[]');
+            deptTickets.push(ticket);
+            localStorage.setItem('tickets_' + ticket.department, JSON.stringify(deptTickets));
             
-            // إضافة التذكرة
-            tickets.push({
-                number: newNumber,
-                time: new Date().toLocaleTimeString('ar-SA', {hour: '2-digit', minute:'2-digit'})
-            });
-            
-            localStorage.setItem('tickets_' + randomDept, JSON.stringify(tickets));
-            
-            // تحديث العرض إذا كان هذا هو القسم الحالي
-            if (randomDept === currentDept) {
+            // إذا كان القسم مطابق، تحديث العرض
+            if (ticket.department === currentDept) {
                 updateDisplay();
-                announceTicket(newNumber, randomDept);
+                addToAnnouncementQueue(ticket);
             }
             
-            updateWaitingCount();
+            updateCounters();
+            updateQueueDisplay();
         }
-        
-        function announceTicket(number, dept) {
-            const deptName = departments[dept].nameAr;
-            const msg = `تذكرة جديدة رقم ${toArabicDigits(number)} قسم ${deptName}`;
-            
-            // استخدام Web Speech API
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(msg);
-                utterance.lang = 'ar-SA';
-                utterance.rate = 0.9;
-                speechSynthesis.speak(utterance);
+
+        // ============ نظام النداء ============
+        function addToAnnouncementQueue(ticket) {
+            announcementQueue.push(ticket);
+            if (announcementQueue.length === 1) {
+                processAnnouncementQueue();
             }
         }
-        
-        // =================== تحديث العرض ===================
+
+        function processAnnouncementQueue() {
+            if (announcementQueue.length > 0) {
+                const ticket = announcementQueue[0];
+                makeAnnouncement(ticket);
+            }
+        }
+
+        function makeAnnouncement(ticket) {
+            if (!soundEnabled) return;
+            
+            const dept = departments[ticket.department];
+            const ticketNumber = ticket.number;
+            const arabicDigits = toArabicDigits(ticketNumber);
+            
+            // تحديث نص الإعلان
+            document.getElementById('announcementAr').textContent = `رقم ${arabicDigits}، ${dept.nameAr}`;
+            document.getElementById('announcementEn').textContent = `Number ${ticketNumber}, ${dept.nameEn}`;
+            
+            // إظهار overlay الإعلان
+            const overlay = document.getElementById('announcementOverlay');
+            overlay.style.display = 'flex';
+            
+            // تشغيل الصفارة
+            playWhistle();
+            
+            // بعد الصفارة، نطق الإعلان
+            setTimeout(() => {
+                speakAnnouncement(ticket);
+            }, 2000);
+            
+            // إخفاء overlay بعد الإعلان
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                announcementQueue.shift();
+                processAnnouncementQueue();
+            }, 10000);
+        }
+
+        function playWhistle() {
+            const whistle = document.getElementById('whistleSound');
+            whistle.currentTime = 0;
+            whistle.play();
+        }
+
+        function speakAnnouncement(ticket) {
+            if (!soundEnabled) return;
+            
+            const dept = departments[ticket.department];
+            const ticketNumber = ticket.number;
+            const arabicDigits = toArabicDigits(ticketNumber);
+            
+            // النطق بالعربية
+            const utteranceAr = new SpeechSynthesisUtterance();
+            utteranceAr.text = `رقم ${arabicDigits}، ${dept.nameAr}، ${dept.location.split('/')[0].trim()}`;
+            utteranceAr.lang = 'ar-SA';
+            utteranceAr.rate = 0.8;
+            utteranceAr.pitch = 1;
+            
+            // النطق بالإنجليزية
+            const utteranceEn = new SpeechSynthesisUtterance();
+            utteranceEn.text = `Number ${ticketNumber}, ${dept.nameEn}, ${dept.location.split('/')[1].trim()}`;
+            utteranceEn.lang = 'en-US';
+            utteranceEn.rate = 0.8;
+            utteranceEn.pitch = 1;
+            
+            // تشغيل العربية ثم الإنجليزية
+            window.speechSynthesis.speak(utteranceAr);
+            
+            utteranceAr.onend = function() {
+                setTimeout(() => {
+                    window.speechSynthesis.speak(utteranceEn);
+                }, 1000);
+            };
+        }
+
+        // ============ تحديث العرض ============
         function updateDisplay() {
+            const deptTickets = allTickets.filter(t => t.department === currentDept);
+            const lastTicket = deptTickets[deptTickets.length - 1];
             const dept = departments[currentDept];
-            const tickets = JSON.parse(localStorage.getItem('tickets_' + currentDept) || '[]');
             
-            // تحديث التذكرة الحالية
-            const latestTicket = tickets.length > 0 ? tickets[tickets.length - 1].number : 0;
-            
-            document.getElementById('currentTicket').textContent = latestTicket || '0000';
-            document.getElementById('currentTicketAr').textContent = toArabicDigits(latestTicket) || '٠٠٠٠';
-            document.getElementById('deptNameAr').textContent = dept.nameAr;
-            document.getElementById('deptNameEn').textContent = dept.nameEn;
-            document.getElementById('currentDept').textContent = dept.nameAr;
-            
-            // تحديث قائمة الانتظار
-            updateQueueDisplay(tickets);
-            
-            // تحديث شبكة الأقسام
-            updateDeptsGrid();
-            
-            // تحديث الخلفية
-            document.querySelector('.ticket-display').style.backgroundColor = dept.color + '20';
+            if (lastTicket) {
+                document.getElementById('currentTicket').textContent = lastTicket.number;
+                document.getElementById('currentTicketAr').textContent = toArabicDigits(lastTicket.number);
+                document.getElementById('deptNameAr').textContent = dept.nameAr;
+                document.getElementById('deptNameEn').textContent = dept.nameEn;
+                document.getElementById('currentDeptTitle').textContent = dept.nameAr;
+                document.getElementById('currentDeptText').textContent = dept.nameAr;
+                
+                // تحديث الألوان
+                document.getElementById('ticketDisplay').style.backgroundColor = dept.color + '20';
+                document.getElementById('ticketDisplay').style.border = '5px solid ' + dept.color;
+            }
         }
-        
-        function updateQueueDisplay(tickets) {
+
+        function updateQueueDisplay() {
             const queueList = document.getElementById('queueList');
-            const queueCount = document.getElementById('queueCount');
+            const recentTickets = allTickets.slice(-8).reverse();
             
-            queueCount.textContent = tickets.length;
             queueList.innerHTML = '';
-            
-            // عرض آخر 8 تذاكر فقط
-            const recentTickets = tickets.slice(-8);
-            
             recentTickets.forEach(ticket => {
+                const dept = departments[ticket.department];
                 const div = document.createElement('div');
                 div.className = 'queue-item';
-                div.textContent = ticket.number;
+                div.innerHTML = `
+                    <div style="font-weight: 900;">${ticket.number}</div>
+                    <div style="font-size: 12px; color: #666;">${dept.nameAr}</div>
+                `;
                 queueList.appendChild(div);
             });
         }
-        
-        function updateDeptsGrid() {
-            const grid = document.getElementById('deptsGrid');
-            grid.innerHTML = '';
+
+        function updateCounters() {
+            // تحديث العداد الكلي
+            document.getElementById('waitingCount').textContent = allTickets.length;
+            
+            // تحديث عدادات الأقسام
+            Object.keys(departments).forEach(dept => {
+                const count = allTickets.filter(t => t.department === dept).length;
+                const countElement = document.getElementById('count-' + dept);
+                if (countElement) {
+                    countElement.textContent = count;
+                }
+            });
+            
+            // تحديث تذاكر اليوم
+            const today = new Date().toDateString();
+            const todayTickets = allTickets.filter(t => {
+                const ticketDate = new Date(t.timestamp).toDateString();
+                return ticketDate === today;
+            });
+            document.getElementById('todayTickets').textContent = todayTickets.length;
+        }
+
+        // ============ بطاقات الأقسام ============
+        function createDeptCards() {
+            const container = document.getElementById('deptCards');
+            container.innerHTML = '';
             
             Object.entries(departments).forEach(([key, dept]) => {
-                const tickets = JSON.parse(localStorage.getItem('tickets_' + key) || '[]');
-                const count = tickets.length;
+                const count = allTickets.filter(t => t.department === key).length;
                 
                 const card = document.createElement('div');
                 card.className = `dept-card ${key === currentDept ? 'active' : ''}`;
+                card.id = 'dept-card-' + key;
                 card.onclick = () => switchDept(key);
+                card.style.borderColor = dept.color;
                 
                 card.innerHTML = `
-                    <div style="font-weight: 700; font-size: 16px;">${dept.nameAr}</div>
-                    <div style="font-size: 24px; font-weight: 900; margin: 5px 0;">${count}</div>
-                    <div style="font-size: 12px; color: #666;">في الانتظار</div>
+                    <div class="dept-name-small">${dept.nameAr}</div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.7); margin-bottom: 5px;">${dept.nameEn}</div>
+                    <div class="dept-count" id="count-${key}">${count}</div>
+                    <div style="font-size: 10px; color: rgba(255,255,255,0.7);">في الانتظار / Waiting</div>
                 `;
                 
-                grid.appendChild(card);
+                container.appendChild(card);
             });
         }
-        
-        function switchDept(deptKey) {
-            currentDept = deptKey;
+
+        function switchDept(dept) {
+            // تحديث البطاقات
+            document.querySelectorAll('.dept-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById('dept-card-' + dept).classList.add('active');
+            
+            // تحديث القسم الحالي
+            currentDept = dept;
             updateDisplay();
+            
+            // إعادة تعيين التدوير التلقائي
+            if (autoRotate) {
+                clearInterval(rotateInterval);
+                startAutoRotate();
+            }
         }
-        
-        function rotateDepartment() {
-            const depts = Object.keys(departments);
-            const currentIndex = depts.indexOf(currentDept);
-            const nextIndex = (currentIndex + 1) % depts.length;
-            switchDept(depts[nextIndex]);
+
+        // ============ التدوير التلقائي ============
+        function startAutoRotate() {
+            if (autoRotate) {
+                clearInterval(rotateInterval);
+                rotateInterval = setInterval(() => {
+                    const depts = Object.keys(departments);
+                    const currentIndex = depts.indexOf(currentDept);
+                    const nextIndex = (currentIndex + 1) % depts.length;
+                    switchDept(depts[nextIndex]);
+                }, 15000); // كل 15 ثانية
+            }
         }
-        
-        // =================== وظائف مساعدة ===================
-        function toArabicDigits(num) {
-            if (!num) return '٠٠٠٠';
-            return num.toString().replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+        // ============ التحكم ============
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.querySelector('.fa-volume-up').parentElement;
+            btn.innerHTML = soundEnabled ? 
+                '<i class="fas fa-volume-up"></i>' : 
+                '<i class="fas fa-volume-mute"></i>';
+            
+            if (!soundEnabled) {
+                window.speechSynthesis.cancel();
+            }
         }
-        
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function callNextTicket() {
+            const deptTickets = allTickets.filter(t => t.department === currentDept && t.status === 'waiting');
+            if (deptTickets.length > 0) {
+                const nextTicket = deptTickets[0];
+                makeAnnouncement(nextTicket);
+                
+                // تحديث حالة التذكرة
+                nextTicket.status = 'called';
+                localStorage.setItem('tickets_' + currentDept, JSON.stringify(
+                    allTickets.filter(t => t.department === currentDept)
+                ));
+            }
+        }
+
+        // ============ أدوات مساعدة ============
+        function toArabicDigits(n) {
+            return n.toString().replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+        }
+
         function updateTime() {
             const now = new Date();
-            document.getElementById('currentTime').textContent = 
-                now.toLocaleTimeString('ar-SA');
+            const timeStr = now.toLocaleTimeString('ar-SA');
+            document.getElementById('currentTime').textContent = timeStr;
             document.getElementById('lastUpdate').textContent = 
                 now.toLocaleTimeString('ar-SA', {hour: '2-digit', minute:'2-digit'});
         }
-        
-        function updateWaitingCount() {
-            let total = 0;
-            Object.keys(departments).forEach(dept => {
-                const tickets = JSON.parse(localStorage.getItem('tickets_' + dept) || '[]');
-                total += tickets.length;
-            });
-            document.getElementById('waitingCount').textContent = total;
+
+        function handleMessage(event) {
+            if (event.data.type === 'NEW_TICKET') {
+                const newTicket = {
+                    number: event.data.ticketNumber,
+                    department: event.data.department,
+                    timestamp: new Date().toISOString(),
+                    status: 'waiting'
+                };
+                addTicket(newTicket);
+            }
         }
-        
-        // =================== التهيئة ===================
-        function init() {
-            loadTickets();
-            updateDisplay();
-            updateTime();
-            updateWaitingCount();
-            setInterval(updateTime, 1000);
-            connectWebSocket();
-            
-            // بدء التدوير التلقائي
-            setInterval(rotateDepartment, 15000);
+
+        function handleStorage(event) {
+            if (event.key === 'new_ticket') {
+                checkNewTickets();
+            }
         }
-        
+
+        function announceNewTicket(ticketNumber, department) {
+            const newTicket = {
+                number: ticketNumber,
+                department: department,
+                timestamp: new Date().toISOString(),
+                status: 'waiting'
+            };
+            addToAnnouncementQueue(newTicket);
+        }
+
         // بدء التطبيق
         window.onload = init;
     </script>
