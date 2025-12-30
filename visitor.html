@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب تذكرة - الزهراني لوجستيك</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        
+        .container {
+            background: white;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 5px solid #ffd700;
+            text-align: center;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: #1a237e;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #ffd700;
+        }
+        
+        .logo img {
+            width: 70%;
+            height: 70%;
+            filter: brightness(0) invert(1);
+        }
+        
+        .dept-name {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1a237e;
+            margin-bottom: 5px;
+        }
+        
+        .dept-en {
+            font-size: 18px;
+            color: #283593;
+            margin-bottom: 30px;
+            direction: ltr;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 18px;
+            text-align: right;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: #1a237e;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 22px;
+            font-weight: 900;
+            margin-top: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            background: #283593;
+        }
+        
+        .ticket-result {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        .ticket-number {
+            font-size: 72px;
+            font-weight: 900;
+            margin: 20px 0;
+        }
+        
+        .ticket-arabic {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://i.ibb.co/1GHY3whz/bsxB90Z.png" alt="شعار">
+        </div>
+        
+        <h1 style="color: #1a237e; margin-bottom: 10px;">الزهراني لوجستيك</h1>
+        <p style="color: #666; margin-bottom: 30px;">نظام التذاكر الذكي</p>
+        
+        <div id="deptInfo">
+            <!-- سيتم ملؤه بالجافاسكريبت -->
+        </div>
+        
+        <div class="form-group">
+            <input type="text" id="customerName" placeholder="اسمك الكريم (اختياري)">
+        </div>
+        
+        <div class="form-group">
+            <select id="serviceType">
+                <option>استفسار</option>
+                <option>شكوى</option>
+                <option>معاملة</option>
+                <option>دفع</option>
+                <option>استلام</option>
+            </select>
+        </div>
+        
+        <button class="btn" onclick="createTicket()">
+            <i class="fas fa-ticket-alt"></i> احصل على تذكرتك
+        </button>
+        
+        <div class="ticket-result" id="ticketResult">
+            <div style="font-size: 80px; margin-bottom: 20px;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div style="font-size: 24px; font-weight: 700;">تم إنشاء تذكرتك!</div>
+            <div class="ticket-number" id="ticketNumber">0000</div>
+            <div class="ticket-arabic" id="ticketArabic">٠٠٠٠</div>
+            <div style="font-size: 18px;">يرجى الانتظار في منطقة الانتظار</div>
+        </div>
+    </div>
+
+    <script>
+        // الحصول على القسم من URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const deptParam = urlParams.get('dept') || 'finance';
+        
+        // تعريف الأقسام
+        const departments = {
+            finance: { nameAr: "المدير المالي", nameEn: "CHIEF FINANCIAL OFFICER" },
+            ninja: { nameAr: "مشرف نينجا", nameEn: "NINJA SUPERVISOR" },
+            keemart: { nameAr: "مشرف كيمارت", nameEn: "KEMART SUPERVISOR" },
+            vehicles: { nameAr: "مسؤول المركبات", nameEn: "VEHICLES OFFICIAL" },
+            projects: { nameAr: "مدير المشاريع", nameEn: "PROJECTS MANAGER" },
+            hr: { nameAr: "مدير الموارد البشرية", nameEn: "HR MANAGER" }
+        };
+        
+        // تحديث عرض القسم
+        const dept = departments[deptParam] || departments.finance;
+        document.getElementById('deptInfo').innerHTML = `
+            <div class="dept-name">${dept.nameAr}</div>
+            <div class="dept-en">${dept.nameEn}</div>
+        `;
+        
+        // تحويل الأرقام للعربية
+        function toArabicDigits(n) {
+            return n.toString().replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+        }
+        
+        // إنشاء تذكرة
+        function createTicket() {
+            // إرسال طلب لخادم WebSocket (محاكاة)
+            const ticketNumber = Math.floor(1000 + Math.random() * 900);
+            
+            // حفظ في localStorage للتزامن
+            let tickets = JSON.parse(localStorage.getItem('tickets_' + deptParam) || '[]');
+            tickets.push({
+                number: ticketNumber,
+                customer: document.getElementById('customerName').value || 'عميل',
+                service: document.getElementById('serviceType').value,
+                time: new Date().toISOString()
+            });
+            
+            localStorage.setItem('tickets_' + deptParam, JSON.stringify(tickets));
+            
+            // عرض النتيجة
+            document.getElementById('ticketNumber').textContent = ticketNumber;
+            document.getElementById('ticketArabic').textContent = toArabicDigits(ticketNumber);
+            document.getElementById('ticketResult').style.display = 'block';
+            
+            // إرسال إشعار لجميع الصفحات المفتوحة (للتزامن)
+            if (window.parent) {
+                window.parent.postMessage({
+                    type: 'NEW_TICKET',
+                    department: deptParam,
+                    ticketNumber: ticketNumber
+                }, '*');
+            }
+            
+            // إرسال إشعار للخادم (محاكاة)
+            sendToServer(deptParam, ticketNumber);
+        }
+        
+        function sendToServer(dept, ticketNumber) {
+            // محاكاة إرسال لخادم WebSocket
+            console.log(`إرسال تذكرة ${ticketNumber} للقسم ${dept}`);
+            
+            // يمكنك هنا إضافة كود الاتصال الفعلي بـ WebSocket
+            // socket.emit('new_ticket', { dept: dept, number: ticketNumber });
+        }
+        
+        // التهيئة
+        window.onload = function() {
+            // تهيئة localStorage إذا لزم
+            if (!localStorage.getItem('tickets_' + deptParam)) {
+                localStorage.setItem('tickets_' + deptParam, JSON.stringify([]));
+            }
+        };
+    </script>
+</body>
+</html>
